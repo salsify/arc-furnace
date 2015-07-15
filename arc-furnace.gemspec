@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'arc-furnace/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ArcFurnace"
+  spec.name          = "arc-furnace"
   spec.version       = ArcFurnace::VERSION
   spec.authors       = ["Daniel Spangenberger", "Brian Tenggren"]
   spec.email         = ["dan@salsify.com"]
