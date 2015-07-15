@@ -51,7 +51,7 @@ describe ArcFurnace::DSL do
         primary_key: 'id'
     )
   end
-  let(:expected_output_path) { "#{ArcFurnace.test_root}/resources/expected_bosch.csv" }
+  let(:expected_output_path) { "#{ArcFurnace.test_root}/resources/expected_dsl_spec.csv" }
   after { File.delete(target_filename) if File.exists?(target_filename) }
 
   before do
