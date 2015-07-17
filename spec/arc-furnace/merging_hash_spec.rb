@@ -43,6 +43,18 @@ describe ArcFurnace::MergingHash do
         })
       end
     end
+
+    context 'with nil row values' do
+      let(:row3) { {"id" => "333", "Field 1" => "foo", "Field 2" => nil }.deep_freeze }
+      let(:source) { TestSource.new([row1, row2, row3])}
+
+      it 'drops all nil vlaues' do
+        expect(hash.get("333")).to eq ({
+          "id" => "333",
+          "Field 1" => "foo"
+        })
+      end
+    end
   end
 
 end
