@@ -19,6 +19,10 @@ module ArcFurnace
                 new_row_entry.concat(Array.wrap(values))
                 row_entry[column] = new_row_entry
               end
+            elsif values.nil?
+              unless column.nil?
+                row_entry[column] = values
+              end
             else
               row_entry[column] = values.dup
             end
