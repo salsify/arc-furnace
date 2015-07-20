@@ -20,7 +20,9 @@ module ArcFurnace
                 row_entry[column] = new_row_entry
               end
             else
-              row_entry[column] = values.dup
+              unless values.nil?
+                row_entry[column] = values.dup
+              end
             end
           end
         end
