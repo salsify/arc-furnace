@@ -1,4 +1,12 @@
 module ArcFurnace
+  # This allows one to merge multiple rows into one such as:
+  #   key, value
+  #     1, foo
+  #     1, bar
+  #     2, baz
+  # Results in:
+  #   1 => { key => 1, value: [foo, bar] }
+  #   2 => { key => 2, value: baz }
   class MergingHash < ::ArcFurnace::Hash
     private_attr_reader :source, :hash
 

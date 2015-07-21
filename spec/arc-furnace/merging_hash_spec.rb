@@ -1,23 +1,7 @@
 require 'spec_helper'
+require_relative 'test_source'
 
 describe ArcFurnace::MergingHash do
-  class TestSource < ArcFurnace::Source
-    def initialize(rows)
-      @rows = rows
-      @index = 0
-    end
-    def empty?
-      @index >= @rows.size
-    end
-    def advance
-      @index += 1
-    end
-    def row
-      result = @index < @rows.size ? @rows[@index] : nil
-      advance
-      result
-    end
-  end
   let(:row1) { { "id" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar" }.deep_freeze }
   let(:row2) { { "id" => "222", "Field 1" => "baz", "Field 2" => "boo bar" }.deep_freeze }
 
