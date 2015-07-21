@@ -7,6 +7,7 @@ require 'arc-furnace/csv_patch'
 require 'arc-furnace/private_attr'
 
 require 'arc-furnace/all_fields_csv_sink'
+require 'arc-furnace/binary_key_merging_hash'
 require 'arc-furnace/block_transform'
 require 'arc-furnace/csv_sink'
 require 'arc-furnace/csv_source'
