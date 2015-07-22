@@ -30,7 +30,11 @@ module ArcFurnace
       define_intermediate(name, type: type, params: params)
     end
 
-    def self.equijoin(name, type: ArcFurnace::Equijoin, params:)
+    def self.inner_join(name, type: ArcFurnace::InnerJoin, params:)
+      define_intermediate(name, type: type, params: params)
+    end
+
+    def self.outer_join(name, type: ArcFurnace::OuterJoin, params:)
       define_intermediate(name, type: type, params: params)
     end
 

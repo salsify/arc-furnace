@@ -21,11 +21,11 @@ describe ArcFurnace::DSL do
                   source: :marketing_info_source
               }
 
-    equijoin :join_results,
-             params: {
-                 left: :product_attributes,
-                 right: :marketing_info
-             }
+    inner_join :join_results,
+               params: {
+                   source: :product_attributes,
+                   hash: :marketing_info
+               }
 
     sink type: ArcFurnace::AllFieldsCSVSink,
          source: :join_results,

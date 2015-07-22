@@ -1,17 +1,14 @@
 require 'arc-furnace/source'
 
 module ArcFurnace
-  class Equijoin < Source
+  class InnerJoin < Source
     private_attr_reader :hash, :source
     attr_reader :value
 
-    def initialize(left: , right:)
-      if left.is_a?(::ArcFurnace::Source) && right.is_a?(::ArcFurnace::Hash)
-        @hash = right
-        @source = left
-      elsif left.is_a?(::ArcFurnace::Hash) && right.is_a?(::ArcFurnace::Source)
-        @hash = left
-        @source = right
+    def initialize(source: , hash:)
+      if source.is_a?(::ArcFurnace::Source) && hash.is_a?(::ArcFurnace::Hash)
+        @hash = hash
+        @source = source
       else
         raise 'Must be passed one Hash and one Source!'
       end
