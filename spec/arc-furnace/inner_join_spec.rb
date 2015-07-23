@@ -20,7 +20,7 @@ describe ArcFurnace::InnerJoin do
 
     context 'with empty source hash' do
       let(:hash) { ArcFurnace::Hash.new(source: empty_source, key_column: "id" ) }
-      let(:source) { ArcFurnace::OuterJoin.new(source: subsource2, hash: hash) }
+      let(:source) { ArcFurnace::InnerJoin.new(source: subsource2, hash: hash) }
 
       it 'returns original source' do
         expect(source.row).to eq nil
