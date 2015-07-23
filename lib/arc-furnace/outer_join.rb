@@ -15,15 +15,12 @@ module ArcFurnace
     end
 
     def prepare
-      hash.prepare
-      source.prepare
       advance
     end
 
     def advance
       loop do
-        @value = source.value
-        source.advance
+        @value = source.row
         break if value.nil?
 
         if hash_value = hash.get(value[hash.key_column])

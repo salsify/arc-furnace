@@ -3,9 +3,11 @@ require 'spec_helper'
 describe ArcFurnace::InnerJoin do
   let(:subsource1) { ArcFurnace::CSVSource.new(filename: "#{ArcFurnace.test_root}/resources/source1.csv") }
   let(:subsource2) { ArcFurnace::CSVSource.new(filename: "#{ArcFurnace.test_root}/resources/source2.csv") }
+  let(:empty_source) { ArcFurnace::CSVSource.new(filename: "#{ArcFurnace.test_root}/resources/empty_source.csv")}
   let(:hash) { ArcFurnace::Hash.new(source: subsource1, key_column: "id") }
   let(:source) { ArcFurnace::InnerJoin.new(source: subsource2, hash: hash) }
   before do
+    hash.prepare
     source.prepare
   end
 
@@ -14,6 +16,15 @@ describe ArcFurnace::InnerJoin do
       expect(source.row.to_hash).to eq ({ "id" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar", "Field 3" => "boo bar", "Field 4" => "baz, bar" })
       expect(source.row.to_hash).to eq ({ "id" => "222", "Field 1" => "baz", "Field 2" => "boo bar", "Field 3" => "baz", "Field 4" => "boo bar" })
       expect(source.row).to be_nil
+    end
+
+    context 'with empty source hash' do
+      let(:hash) { ArcFurnace::Hash.new(source: empty_source, key_column: "id" ) }
+      let(:source) { ArcFurnace::OuterJoin.new(source: subsource2, hash: hash) }
+
+      it 'returns original source' do
+        expect(source.row).to eq nil
+      end
     end
   end
 
