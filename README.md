@@ -1,6 +1,6 @@
 # ArcFurnace
 
-ArcFurnace melts, melds, and transforms your scrap data into perfectly crafted data for ingest into applications, 
+ArcFurnace melts, melds, and transforms your scrap data into perfectly crafted data for ingest into applications,
 analysis, or whatnot. ArcFurnace simplifies simple ETL (Extract, Transform, Load) tasks for small to medium sets of data
 using a programmatic DSL interface. Here's an example:
 
@@ -8,28 +8,28 @@ using a programmatic DSL interface. Here's an example:
 class Transform < ArcFurnace::DSL
 
     source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
-    
+
     transform :marketing_info_source, params: { source: :marketing_info_csv } do |row|
       row.delete('Name')
       row
     end
-    
+
     source :product_attributes,
            type: ArcFurnace::MultiCSVSource,
            params: { filenames: :product_attribute_filenames }
-    
+
     hash_node :marketing_info,
               params: {
                   key_column: :primary_key,
                   source: :marketing_info_source
               }
-    
-    equijoin :join_results,
-             params: {
-                 left: :product_attributes,
-                 right: :marketing_info
-             }
-    
+
+    outer_join :join_results,
+               params: {
+                   source: :product_attributes,
+                   hash: :marketing_info
+               }
+
     sink type: ArcFurnace::AllFieldsCSVSink,
          source: :join_results,
          params: { filename: :destination_name }
