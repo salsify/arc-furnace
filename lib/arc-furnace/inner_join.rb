@@ -15,8 +15,6 @@ module ArcFurnace
     end
 
     def prepare
-      hash.prepare
-      source.prepare
       advance
     end
 
