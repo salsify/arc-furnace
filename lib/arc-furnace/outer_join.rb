@@ -32,11 +32,8 @@ module ArcFurnace
             hash_value[key] = value
           end
           @value = hash_value
-          break
-        else
-          @value
-          break
         end
+        break
       end
     end
 
