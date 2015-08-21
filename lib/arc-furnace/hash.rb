@@ -9,6 +9,12 @@ module ArcFurnace
       @hash = {}
     end
 
+    # Pass a block that accepts two argument, the join key
+    # for each value and the value
+    def each(&block)
+      hash.each(&block)
+    end
+
     def prepare
       loop do
         break if source.empty?

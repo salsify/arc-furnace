@@ -25,4 +25,10 @@ describe ArcFurnace::Hash do
     end
   end
 
+  describe "#each" do
+    it "yields rows as expected" do
+      expect { |b| hash.each(&b) }.to yield_successive_args(["111", row1], ["222", row2])
+    end
+  end
+
 end
