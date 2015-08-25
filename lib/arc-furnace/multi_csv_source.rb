@@ -39,7 +39,7 @@ module ArcFurnace
       if filenames.empty?
         nil
       else
-        @file = File.open(filenames.pop)
+        @file = File.open(filenames.pop, encoding: encoding)
         @csv = CSV.new(file, encoding: encoding, headers: true).each
         advance_in_current_file || open_next_file
       end
