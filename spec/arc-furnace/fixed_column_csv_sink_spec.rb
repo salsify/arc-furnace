@@ -3,7 +3,8 @@ require 'spec_helper'
 describe ArcFurnace::FixedColumnCSVSink do
   let(:target_filename) { Dir::Tmpname.create('output.csv') {} }
   let(:expected_output_path) { "#{ArcFurnace.test_root}/resources/fixed_column_expected.csv" }
-  let(:sink) { ArcFurnace::FixedColumnCSVSink.new(filename: target_filename, fields: { "id" => 1, "Field 1" => 2, "Field 2" => 1 }) }
+  let(:options) { { fields: { "id" => 1, "Field 1" => 2, "Field 2" => 1 } } }
+  let(:sink) { ArcFurnace::FixedColumnCSVSink.new(filename: target_filename, **options) }
   after { File.delete(target_filename) if File.exists?(target_filename) }
 
   before do
@@ -14,6 +15,14 @@ describe ArcFurnace::FixedColumnCSVSink do
   end
 
   describe '#row' do
+    it 'writes all rows' do
+      expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
+    end
+  end
+
+  context 'with force quotes' do
+    let(:expected_output_path) { "#{ArcFurnace.test_root}/resources/fixed_column_force_quotes_expected.csv" }
+    let(:options) { { force_quotes: true, fields: { "id" => 1, "Field 1" => 2, "Field 2" => 1 } } }
     it 'writes all rows' do
       expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
     end

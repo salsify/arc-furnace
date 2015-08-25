@@ -6,8 +6,8 @@ module ArcFurnace
 
     # Expects filename to a filename to open the csv
     # Expects fields to a hash of Column name => column Width
-    def initialize(filename: , fields: , encoding: 'UTF-8')
-      @csv = CSV.open(filename, 'wb', encoding: encoding, headers: true)
+    def initialize(filename: , fields: , encoding: 'UTF-8', force_quotes: false)
+      @csv = CSV.open(filename, 'wb', encoding: encoding, headers: true, force_quotes: force_quotes)
       @fields = fields
       write_header
     end
