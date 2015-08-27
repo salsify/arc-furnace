@@ -42,7 +42,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'arc-furnace'
+gem 'arc-furnace', github: 'salsify/arc-furnace'
 ```
 
 And then execute:
