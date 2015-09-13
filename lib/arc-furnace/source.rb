@@ -1,11 +1,12 @@
 module ArcFurnace
   class Source
     extend Forwardable
-    # Advance this source by one, returning the row as a hash
+
     def prepare
 
     end
 
+    # Advance this source by one, returning the row as a hash
     def row
       result = value
       advance
