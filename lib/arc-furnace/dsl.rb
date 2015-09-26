@@ -4,12 +4,17 @@ module ArcFurnace
   class DSL
 
     eattr_accessor :sink_node, :sink_source, :intermediates_map
+    @intermediates_map = {}
 
+    # Ensure that subclasses don't overwrite the parent's transform
+    # node definitions
     def self.inherited(subclass)
       subclass.intermediates_map = intermediates_map.dup
     end
-    @intermediates_map = {}
 
+    # Define the sink for this transformation. Only a single sink may be
+    # specified per transformation. The sink is delivered a hash per row or
+    # entity, and feeds them from the graph of nodes above it.
     def self.sink(type: , source:, params:)
       if sink_node
         raise 'Sink already defined!'
@@ -21,23 +26,35 @@ module ArcFurnace
       @sink_source = source
     end
 
+    # Define a hash node, processing all rows from it's source and caching them
+    # in-memory.
     def self.hash_node(name, type: ArcFurnace::Hash, params:)
       define_intermediate(name, type: type, params: params)
     end
 
+    # A source that has row semantics, delivering a hash per row (or per entity)
+    # for the source.
     def self.source(name, type:, params:)
       raise "Source #{type} is not a Source!" unless type <= Source
       define_intermediate(name, type: type, params: params)
     end
 
+    # Define an inner join node where rows from the source are dropped
+    # if an associated entity is not found in the hash for the join key
     def self.inner_join(name, type: ArcFurnace::InnerJoin, params:)
       define_intermediate(name, type: type, params: params)
     end
 
+    # Define an outer join nod  e where rows from the source are kept
+    # even if an associated entity is not found in the hash for the join key
     def self.outer_join(name, type: ArcFurnace::OuterJoin, params:)
       define_intermediate(name, type: type, params: params)
     end
 
+    # Define a node that transforms rows. By default you get a BlockTransform
+    # (and when this metaprogramming method is passed a block) that will be passed
+    # a hash for each row. The result of the block becomes the row for the next
+    # downstream node.
     def self.transform(name, type: BlockTransform, params: {}, &block)
       if block
         params[:block] = block
@@ -46,6 +63,10 @@ module ArcFurnace
       define_intermediate(name, type: type, params: params)
     end
 
+    # Create an instance to run a transformation, passing the parameters to
+    # instantiate the transform instance with. The resulting class instance
+    # will have a single public method--#execute, which will perform the
+    # transformation.
     def self.instance(params = {})
       DSLInstance.new(self, params)
     end

@@ -17,6 +17,7 @@ describe ArcFurnace::OuterJoin do
       expect(source.row).to eq ({ "id" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar", "Field 3" => "boo bar", "Field 4" => "baz, bar" })
       expect(source.row).to eq ({ "id" => "222", "Field 1" => "baz", "Field 2" => "boo bar", "Field 3" => "baz", "Field 4" => "boo bar" })
       expect(source.row).to eq ({ "id" => "333", "Field 3" => "black", "Field 4" => "brown" })
+      expect(source.row).to be_nil
     end
 
     context 'with empty source hash' do
@@ -27,6 +28,19 @@ describe ArcFurnace::OuterJoin do
         expect(source.row).to eq ({ "id" => "111", "Field 3" => "boo bar", "Field 4" => "baz, bar" })
         expect(source.row).to eq ({ "id" => "222", "Field 3" => "baz", "Field 4" => "boo bar" })
         expect(source.row).to eq ({ "id" => "333", "Field 3" => "black", "Field 4" => "brown" })
+        expect(source.row).to be_nil
+      end
+    end
+
+    context 'with key_column option' do
+      let(:subsource4) { ArcFurnace::CSVSource.new(filename: "#{ArcFurnace.test_root}/resources/source4.csv") }
+      let(:source) { ArcFurnace::OuterJoin.new(source: subsource4, hash: hash, key_column: 'InternalId') }
+
+      it 'feeds all rows' do
+        expect(source.row).to eq ({ "id" => "111", "InternalId" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar", "Field 3" => "boo bar", "Field 4" => "baz, bar" })
+        expect(source.row).to eq ({ "id" => "222", "InternalId" => "222", "Field 1" => "baz", "Field 2" => "boo bar", "Field 3" => "baz", "Field 4" => "boo bar" })
+        expect(source.row).to eq ({ "InternalId" => "333", "Field 3" => "black", "Field 4" => "brown" })
+        expect(source.row).to be_nil
       end
     end
   end

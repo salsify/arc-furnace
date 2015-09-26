@@ -1,39 +1,12 @@
-require 'arc-furnace/source'
+require 'arc-furnace/abstract_join'
 
 module ArcFurnace
-  class OuterJoin < Source
-    private_attr_reader :hash, :source
-    attr_reader :value
-
-    def initialize(source: , hash:)
-      if source.is_a?(::ArcFurnace::Source) && hash.is_a?(::ArcFurnace::Hash)
-        @hash = hash
-        @source = source
-      else
-        raise 'Must be passed one Hash and one Source!'
-      end
-    end
-
-    def prepare
-      advance
-    end
+  class OuterJoin < AbstractJoin
 
     def advance
-      loop do
-        @value = source.row
-        break if value.nil?
-
-        if hash_value = hash.get(value[hash.key_column])
-          hash_value = hash_value.deep_dup
-          value.each do |key, value|
-            hash_value[key] = value
-          end
-          @value = hash_value
-        end
-        break
-      end
+      @value = source.row
+      merge_source_row(value) unless value.nil?
     end
 
-    delegate empty?: :source
   end
 end

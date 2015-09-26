@@ -26,6 +26,17 @@ describe ArcFurnace::InnerJoin do
         expect(source.row).to eq nil
       end
     end
+
+    context 'with key_column option' do
+      let(:subsource4) { ArcFurnace::CSVSource.new(filename: "#{ArcFurnace.test_root}/resources/source4.csv") }
+      let(:source) { ArcFurnace::InnerJoin.new(source: subsource4, hash: hash, key_column: 'InternalId') }
+
+      it 'feeds all rows' do
+        expect(source.row.to_hash).to eq ({ "id" => "111", "InternalId" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar", "Field 3" => "boo bar", "Field 4" => "baz, bar" })
+        expect(source.row.to_hash).to eq ({ "id" => "222", "InternalId" => "222", "Field 1" => "baz", "Field 2" => "boo bar", "Field 3" => "baz", "Field 4" => "boo bar" })
+        expect(source.row).to be_nil
+      end
+    end
   end
 
   describe '#value' do
@@ -39,4 +50,5 @@ describe ArcFurnace::InnerJoin do
       expect(source.row).to be_nil
     end
   end
+
 end
