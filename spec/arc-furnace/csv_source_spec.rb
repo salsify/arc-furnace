@@ -28,4 +28,13 @@ describe ArcFurnace::CSVSource do
       expect(source.row).to eq ({ "id" => "444", "Field 3" => [ "boo bar", "baz" ] })
     end
   end
+
+  describe 'with nils' do
+    let(:source) { ArcFurnace::CSVSource.new(filename: "#{ArcFurnace.test_root}/resources/missing_key.csv") }
+    it 'skips nils' do
+      expect(source.row).to eq ({ "Field 3" => "boo bar", "Field 4" => "baz, bar" })
+      expect(source.row).to eq ({ "Field 3" => "baz", "Field 4" => "boo bar" })
+      expect(source.row).to eq ({ "Field 3" => "black", "Field 4" => "brown" })
+    end
+  end
 end

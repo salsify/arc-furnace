@@ -1,4 +1,5 @@
 require 'eigenclass'
+require 'arc-furnace/error_handler'
 
 module ArcFurnace
   class DSL
@@ -80,12 +81,13 @@ module ArcFurnace
     end
 
     class DSLInstance
-      attr_reader :sink_node, :sink_source, :intermediates_map, :params, :dsl_class
+      attr_reader :sink_node, :sink_source, :intermediates_map, :params, :dsl_class, :error_handler
 
-      def initialize(dsl_class, params)
+      def initialize(dsl_class, error_handler: ErrorHandler.new, **params)
         @dsl_class = dsl_class
         @params = params
         @intermediates_map = {}
+        @error_handler = error_handler
       end
 
       def execute
@@ -104,8 +106,10 @@ module ArcFurnace
       end
 
       def prepare
-        intermediates_map.each do |_, instance|
+        intermediates_map.each do |node_id, instance|
           instance.prepare
+          instance.error_handler = error_handler
+          instance.node_id = node_id
         end
         sink_node.prepare
       end

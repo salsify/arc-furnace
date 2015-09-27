@@ -31,15 +31,21 @@ module ArcFurnace
     protected
 
     def merge_source_row(source_row)
-      if hash_value = hash.get(source_row[key_column])
-        hash_value = hash_value.deep_dup
-        source_row.each do |key, value|
-          hash_value[key] = value
+      key = source_row[key_column]
+      if key
+        if hash_value = hash.get(key)
+          hash_value = hash_value.deep_dup
+          source_row.each do |key, value|
+            hash_value[key] = value
+          end
+          @value = hash_value
+          true
+        else
+          error_handler.missing_hash_key(source_row: source_row, key: key, node_id: node_id)
+          false
         end
-        @value = hash_value
-        true
       else
-        false
+        error_handler.missing_join_key(source_row: source_row, node_id: node_id)
       end
     end
 

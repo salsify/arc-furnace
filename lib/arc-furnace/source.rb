@@ -1,5 +1,7 @@
+require 'arc-furnace/node'
+
 module ArcFurnace
-  class Source
+  class Source < Node
     extend Forwardable
 
     def prepare

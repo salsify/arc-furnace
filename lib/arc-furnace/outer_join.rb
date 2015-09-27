@@ -5,7 +5,9 @@ module ArcFurnace
 
     def advance
       @value = source.row
-      merge_source_row(value) unless value.nil?
+      unless value.nil?
+        merge_source_row(value)
+      end
     end
 
   end

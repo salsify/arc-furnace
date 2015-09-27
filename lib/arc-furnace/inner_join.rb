@@ -10,7 +10,6 @@ module ArcFurnace
   # Example:
   # Source row { id: "foo", key1: "boo", key2: "bar" }
   # Matching hash row { id: "foo", key1: "bar", key3: "baz" }
-
   # Result row: { id: "foo", key1: "boo", key2: "bar", key3: "baz" }
   class InnerJoin < AbstractJoin
 
@@ -18,7 +17,9 @@ module ArcFurnace
       loop do
         @value = source.row
         break if value.nil?
-        break if merge_source_row(value)
+        if merge_source_row(value)
+          break
+        end
       end
     end
 
