@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ArcFurnace::DSL do
+describe ArcFurnace::Pipeline do
 
-  class Transform < ArcFurnace::DSL
+  class Transform < ArcFurnace::Pipeline
 
     source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
 
