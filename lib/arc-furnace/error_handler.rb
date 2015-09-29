@@ -8,7 +8,7 @@ module ArcFurnace
       # nothing
     end
 
-    # Called during a join operation when the hash is missing a vlue for the join key.
+    # Called during a join operation when the hash is missing a value for the join key.
     def missing_hash_key(key:, source_row:, node_id:)
       # nothing
     end
