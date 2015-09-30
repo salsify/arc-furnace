@@ -76,7 +76,8 @@ are almost exclusively used as inputs to one side of joins.
 
 An `InnerJoin` or an `OuterJoin` join two sources of data (one must be a `Hash`) based upon a key. By default the join
 key is the key that the hash was rolled-up on, however, the `key_column` option on both `InnerJoin` and `OuterJoin`
-may override this.
+may override this. Note the default join is an inner join, which will drop source rows if the hash does not contain
+a matching row.
 
 #### Transforms
 
