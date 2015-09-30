@@ -31,6 +31,7 @@ module ArcFurnace
 
     end
 
+    # Advance this source by one. #advance specifies no return value contract
     def advance
 
     end
