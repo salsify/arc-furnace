@@ -1,5 +1,7 @@
+require 'arc-furnace/node'
+
 module ArcFurnace
-  class Source
+  class Source < Node
     extend Forwardable
 
     def prepare
@@ -19,6 +21,7 @@ module ArcFurnace
     end
 
     # The current value this source points at
+    # This is generally the only method required to implement a source.
     def value
 
     end

@@ -5,7 +5,7 @@ analysis, or whatnot. ArcFurnace simplifies simple ETL (Extract, Transform, Load
 using a programmatic DSL interface. Here's an example:
 
 ```ruby
-class Transform < ArcFurnace::DSL
+class Transform < ArcFurnace::Pipeline
 
     source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
 
@@ -49,19 +49,66 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install arc-furnace
-
 ## Usage
 
-TODO: Write usage instructions here
+ArcFurnace provides a few concepts useful to extracting and transforming data.
+
+### Node Types Available
+
+#### Pipelines
+
+Pipelines define a a complete transformation and define a directed, acyclic graph of
+operations that define how data is transformed. Each type of node in a `Pipeline` is defined below, but
+a Pipelines defines the network of nodes that transform data.
+
+#### Sources
+
+A `Source` provides values to a `Pipeline`. A `Pipeline` may have many sources. Essentially, any nodes that
+require a stream of data (`Hash`, `Transform`, `Join`, `Sink`) will have one.
+
+#### Hashes
+
+A `Hash` provides indexed access to a `Source` but pre-computing the index based on a key. The processing happens during the 
+prepare stage of pipeline processing. Hashes have a simple interface, `#get(primary_key)`, to requesting data. Hashes
+are almost exclusively used as inputs to one side of joins.
+
+#### Joins
+
+An `InnerJoin` or an `OuterJoin` join two sources of data (one must be a `Hash`) based upon a key. By default the join
+key is the key that the hash was rolled-up on, however, the `key_column` option on both `InnerJoin` and `OuterJoin`
+may override this. Note the default join is an inner join, which will drop source rows if the hash does not contain
+a matching row.
+
+#### Transforms
+
+A `Transform` acts as a source, however, takes a source as an input and transforms each input. The `BlockTransform` and
+associated sugar in the `transform` method of `Pipeline` make this very easy (see the example above).
+
+#### Sinks
+
+Each `Pipeline` has a single sink. Pipelines must produce data somewhere, and that data goes to a sink. Sinks
+subscribe to the `#row(hash)` interace--each output row is passed to this method for handling.
+
+### General pipeline development process
+
+1. Define a source. Choose an existing `Source` implementation in this library (`CSVSource` or `ExcelSource`), 
+   extend the `EnumeratorSource`, or implement the `row()` method for a new source.
+2. Define any transformations, or joins. This may cause you to revisit #1.
+3. Define the sink. This is generally custom, or, may be one of the provided `CSVSink` types.
+4. Roll it together in a `Pipeline`.
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+## TODOs
+
+1. Add a `filter` node and implementation to `Pipeline`
+2. Add examples for `ErrorHandler` interface.
+3. Add sugar to define a `BlockTransform` on a `Source` definition in a `Pipeline`.
+4. Add `unfold`, which blows a row out to multiple rows.
 
 ## Contributing
 

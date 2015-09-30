@@ -1,39 +1,27 @@
-require 'arc-furnace/source'
+require 'arc-furnace/abstract_join'
 
 module ArcFurnace
-  class InnerJoin < Source
-    private_attr_reader :hash, :source
-    attr_reader :value
-
-    def initialize(source: , hash:)
-      if source.is_a?(::ArcFurnace::Source) && hash.is_a?(::ArcFurnace::Hash)
-        @hash = hash
-        @source = source
-      else
-        raise 'Must be passed one Hash and one Source!'
-      end
-    end
-
-    def prepare
-      advance
-    end
+  # Perform a join between a hash and a source, only producing rows
+  # from the source that match a row from the hash. The resulting row
+  # will merge the source "into" the hash, that is, values from the
+  # source that share the same keys will overwrite values in the hash
+  # value for the corresponding source row.
+  #
+  # Example:
+  # Source row { id: "foo", key1: "boo", key2: "bar" }
+  # Matching hash row { id: "foo", key1: "bar", key3: "baz" }
+  # Result row: { id: "foo", key1: "boo", key2: "bar", key3: "baz" }
+  class InnerJoin < AbstractJoin
 
     def advance
       loop do
-        @value = source.value
-        source.advance
+        @value = source.row
         break if value.nil?
-        if hash_value = hash.get(value[hash.key_column])
-          hash_value = hash_value.deep_dup
-          value.each do |key, value|
-            hash_value[key] = value
-          end
-          @value = hash_value
+        if merge_source_row(value)
           break
         end
       end
     end
 
-    delegate empty?: :source
   end
 end

@@ -28,6 +28,8 @@ module ArcFurnace
           row_entry = hash[row_key] ||= {}
           value_arr = row_entry[second_key] ||= []
           value_arr.concat(Array.wrap(value))
+        else
+          error_handler.missing_primary_key(source_row: row, node_id: node_id)
         end
       end
     end
