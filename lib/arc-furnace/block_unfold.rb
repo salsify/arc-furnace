@@ -1,7 +1,7 @@
-require 'arc-furnace/transform'
+require 'arc-furnace/unfold'
 
 module ArcFurnace
-  class BlockTransform < Transform
+  class BlockUnfold < Unfold
     private_attr_reader :block
 
     def initialize(source:, block:)
@@ -10,7 +10,7 @@ module ArcFurnace
       super(source: source)
     end
 
-    def transform(row)
+    def unfold(row)
       block.call(row)
     end
 

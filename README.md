@@ -84,6 +84,12 @@ a matching row.
 A `Transform` acts as a source, however, takes a source as an input and transforms each input. The `BlockTransform` and
 associated sugar in the `transform` method of `Pipeline` make this very easy (see the example above).
 
+#### Unfolds
+
+An `Unfold` acts as a source, however, takes a source as an input and produces multiple rows for that source as an output.
+A common case for this is splitting rows into multiple rows depending upon their keys. The `BlockTransform` and associated
+sugar in the `unfold` method of `Pipeline` make this fiarly easy (see `pipeline_spec.rb`).
+
 #### Sinks
 
 Each `Pipeline` has a single sink. Pipelines must produce data somewhere, and that data goes to a sink. Sinks
@@ -108,7 +114,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 1. Add a `filter` node and implementation to `Pipeline`
 2. Add examples for `ErrorHandler` interface.
 3. Add sugar to define a `BlockTransform` on a `Source` definition in a `Pipeline`.
-4. Add `unfold`, which blows a row out to multiple rows.
 
 ## Contributing
 

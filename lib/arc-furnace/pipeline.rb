@@ -1,4 +1,5 @@
 require 'eigenclass'
+require 'arc-furnace/nodes'
 require 'arc-furnace/error_handler'
 
 module ArcFurnace
@@ -64,6 +65,18 @@ module ArcFurnace
       define_intermediate(name, type: type, params: params)
     end
 
+    # Define a node that unfolds rows. By default you get a BlocUnfold
+    # (and when this metaprogramming method is passed a block) that will be passed
+    # a hash for each row. The result of the block becomes the set of rows for the next
+    # downstream node.
+    def self.unfold(name, type: BlockUnfold, params: {}, &block)
+      if block
+        params[:block] = block
+      end
+      raise "Unfold #{type} is not an Unfold!" unless type <= Unfold
+      define_intermediate(name, type: type, params: params)
+    end
+
     # Create an instance to run a transformation, passing the parameters to
     # instantiate the transform instance with. The resulting class instance
     # will have a single public method--#execute, which will perform the
@@ -107,9 +120,9 @@ module ArcFurnace
 
       def prepare
         intermediates_map.each do |node_id, instance|
-          instance.prepare
           instance.error_handler = error_handler
           instance.node_id = node_id
+          instance.prepare
         end
         sink_node.prepare
       end
