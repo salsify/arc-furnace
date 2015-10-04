@@ -3,7 +3,7 @@ require 'arc-furnace/version'
 require 'active_support'
 require 'active_support/core_ext'
 
-require 'arc-furnace/csv_patch'
+require 'arc-furnace/csv_to_hash_with_duplicate_headers'
 require 'arc-furnace/private_attr'
 
 require 'arc-furnace/dsl'

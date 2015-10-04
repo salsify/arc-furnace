@@ -1,8 +1,10 @@
 require 'arc-furnace/source'
+require 'arc-furnace/csv_to_hash_with_duplicate_headers'
 require 'csv'
 
 module ArcFurnace
   class CSVSource < Source
+    include CSVToHashWithDuplicateHeaders
     private_attr_reader :csv, :file
     attr_reader :value
 
@@ -20,7 +22,7 @@ module ArcFurnace
     def advance
       @value =
         begin
-          csv.next.to_hash_with_duplicates if csv
+          csv_to_hash_with_duplicates(csv.next) if csv
         rescue StopIteration
           file.close
           @csv = nil
