@@ -6,4 +6,4 @@ rvm:
   - 2.1.6
   - 2.2.3
   - jruby-19mode
-  - jruby-9.0.1
+  - jruby-9000
