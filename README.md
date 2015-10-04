@@ -1,4 +1,7 @@
 # ArcFurnace
+[![Build Status](https://travis-ci.org/salsify/arc-furnace.svg?branch=master)][travis]
+
+[travis]: http://travis-ci.org/salsify/arc-furnace
 
 ArcFurnace melts, melds, and transforms your scrap data into perfectly crafted data for ingest into applications,
 analysis, or whatnot. ArcFurnace simplifies simple ETL (Extract, Transform, Load) tasks for small to medium sets of data
