@@ -1,6 +1,8 @@
 # ArcFurnace
+[![Gem Version](https://badge.fury.io/rb/arc-furnace.png)][gem]
 [![Build Status](https://travis-ci.org/salsify/arc-furnace.svg?branch=master)][travis]
 
+[gem]: https://rubygems.org/gems/arc-furnace
 [travis]: http://travis-ci.org/salsify/arc-furnace
 
 ArcFurnace melts, melds, and transforms your scrap data into perfectly crafted data for ingest into applications,
