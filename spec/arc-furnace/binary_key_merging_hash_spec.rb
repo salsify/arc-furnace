@@ -39,7 +39,37 @@ describe ArcFurnace::BinaryKeyMergingHash do
       let(:row3) { {"id" => "111", "Field" => "foo", "Value" => nil }.deep_freeze }
       let(:source) { TestSource.new([row1, row2, row3])}
 
-      it 'drops all nil vlaues' do
+      it 'drops all nil values' do
+        expect(hash.get("111")).to eq ({ "Field1" => ["boo"]})
+      end
+
+      it 'registered a missing key' do
+        # Nil values are considered missing primary keys
+        expect(error_handler).to have_received(:missing_primary_key).with(source_row: row3, node_id: :hash)
+        expect(error_handler).not_to have_received(:duplicate_primary_key)
+      end
+    end
+
+    context 'with nil primary key values' do
+      let(:row3) { {"id" => nil, "Field" => "foo", "Value" => "bar" }.deep_freeze }
+      let(:source) { TestSource.new([row1, row2, row3])}
+
+      it 'drops all nil key values values' do
+        expect(hash.get(nil)).to be_nil
+      end
+
+      it 'registered a missing key' do
+        # Nil values are considered missing primary keys
+        expect(error_handler).to have_received(:missing_primary_key).with(source_row: row3, node_id: :hash)
+        expect(error_handler).not_to have_received(:duplicate_primary_key)
+      end
+    end
+
+    context 'with nil secondary key values' do
+      let(:row3) { {"id" => "111", "Field" => nil, "Value" => "bar" }.deep_freeze }
+      let(:source) { TestSource.new([row1, row2, row3])}
+
+      it 'drops all nil key values vlaues' do
         expect(hash.get("111")).to eq ({ "Field1" => ["boo"]})
       end
 
