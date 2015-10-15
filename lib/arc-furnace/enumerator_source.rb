@@ -30,7 +30,7 @@ module ArcFurnace
 
     # Return the enumerator
     def build_enumerator
-      raise "Unimplemented!"
+      raise "Unimplemented"
     end
   end
 end
