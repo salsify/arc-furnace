@@ -80,4 +80,61 @@ describe ArcFurnace::Pipeline do
     expect(error_handler).to have_received(:duplicate_primary_key)
   end
 
+  context 'with a filter' do
+    class MarketingFilter < ArcFurnace::Filter
+      def filter(row)
+        row['id'] == '111'
+      end
+    end
+    class FilterTransform < ArcFurnace::Pipeline
+      source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
+
+      filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv, filter_param: "dododo" }
+
+      sink type: ArcFurnace::AllFieldsCSVSink,
+           source: :filtered_marketing_info,
+           params: { filename: :destination_name }
+
+    end
+
+    let(:instance) do
+      FilterTransform.instance(
+          marketing_filename: marketing_source,
+          destination_name: target_filename
+      )
+    end
+    let(:expected_output_path) { "#{ArcFurnace.test_root}/resources/expected_filtered_dsl_spec.csv" }
+
+    it 'writes all rows' do
+      expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
+    end
+
+    context 'with a block inadvertently specified for a node' do
+      class FilterTransformWithBlock < ArcFurnace::Pipeline
+        source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
+
+        filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv, filter_param: "dododo" } do |row|
+          # yo yo yo should not hit here!
+          raise 'Not a good place to be'
+        end
+
+        sink type: ArcFurnace::AllFieldsCSVSink,
+             source: :filtered_marketing_info,
+             params: { filename: :destination_name }
+
+      end
+
+      let(:instance) do
+        FilterTransformWithBlock.instance(
+            marketing_filename: marketing_source,
+            destination_name: target_filename
+        )
+      end
+
+      it 'writes all rows' do
+        expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
+      end
+    end
+
+  end
 end

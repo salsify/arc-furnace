@@ -73,7 +73,7 @@ require a stream of data (`Hash`, `Transform`, `Join`, `Sink`) will have one.
 
 #### Hashes
 
-A `Hash` provides indexed access to a `Source` but pre-computing the index based on a key. The processing happens during the 
+A `Hash` provides indexed access to a `Source` but pre-computing the index based on a key. The processing happens during the
 prepare stage of pipeline processing. Hashes have a simple interface, `#get(primary_key)`, to requesting data. Hashes
 are almost exclusively used as inputs to one side of joins.
 
@@ -83,6 +83,12 @@ An `InnerJoin` or an `OuterJoin` join two sources of data (one must be a `Hash`)
 key is the key that the hash was rolled-up on, however, the `key_column` option on both `InnerJoin` and `OuterJoin`
 may override this. Note the default join is an inner join, which will drop source rows if the hash does not contain
 a matching row.
+
+#### Filters
+
+A `Filter` acts as a source, however, takes a source as an input and determines whether to pass each row to
+the next downstream node by calling the `#filter` method on itself. There is an associated `BlockFilter` and
+sugar on `Pipeline` to make this easy.
 
 #### Transforms
 
@@ -102,7 +108,7 @@ subscribe to the `#row(hash)` interace--each output row is passed to this method
 
 ### General pipeline development process
 
-1. Define a source. Choose an existing `Source` implementation in this library (`CSVSource` or `ExcelSource`), 
+1. Define a source. Choose an existing `Source` implementation in this library (`CSVSource` or `ExcelSource`),
    extend the `EnumeratorSource`, or implement the `row()` method for a new source.
 2. Define any transformations, or joins. This may cause you to revisit #1.
 3. Define the sink. This is generally custom, or, may be one of the provided `CSVSink` types.
@@ -116,9 +122,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## TODOs
 
-1. Add a `filter` node and implementation to `Pipeline`
-2. Add examples for `ErrorHandler` interface.
-3. Add sugar to define a `BlockTransform` on a `Source` definition in a `Pipeline`.
+1. Add examples for `ErrorHandler` interface.
+2. Add sugar to define a `BlockTransform` on a `Source` definition in a `Pipeline`.
 
 ## Contributing
 

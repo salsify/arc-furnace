@@ -23,7 +23,7 @@ module ArcFurnace
       end
 
       @sink_node = -> do
-        type.new(resolve_parameters(params))
+        type.new(resolve_parameters(:sink, params))
       end
       @sink_source = source
     end
@@ -58,22 +58,34 @@ module ArcFurnace
     # a hash for each row. The result of the block becomes the row for the next
     # downstream node.
     def self.transform(node_id, type: BlockTransform, params: {}, &block)
-      if block
+      if block_given? && type <= BlockTransform
         params[:block] = block
       end
       raise "Transform #{type} is not a Transform!" unless type <= Transform
       define_intermediate(node_id, type: type, params: params)
     end
 
-    # Define a node that unfolds rows. By default you get a BlocUnfold
+    # Define a node that unfolds rows. By default you get a BlockUnfold
     # (and when this metaprogramming method is passed a block) that will be passed
     # a hash for each row. The result of the block becomes the set of rows for the next
     # downstream node.
     def self.unfold(node_id, type: BlockUnfold, params: {}, &block)
-      if block
+      if block_given? && type <= BlockUnfold
         params[:block] = block
       end
       raise "Unfold #{type} is not an Unfold!" unless type <= Unfold
+      define_intermediate(node_id, type: type, params: params)
+    end
+
+    # Define a node that filters rows. By default you get a BlockFilter
+    # (and when this metaprogramming method is passed a block) that will be passed
+    # a hash for each row. The result of the block determines if a given row
+    # flows to a downstream node
+    def self.filter(node_id, type: BlockFilter, params: {}, &block)
+      if block_given? && type <= BlockFilter
+        params[:block] = block
+      end
+      raise "Filter #{type} is not a Filter!" unless type <= Filter
       define_intermediate(node_id, type: type, params: params)
     end
 
@@ -89,7 +101,7 @@ module ArcFurnace
 
     def self.define_intermediate(node_id, type:, params:)
       intermediates_map[node_id] = -> do
-        type.new(resolve_parameters(params))
+        type.new(resolve_parameters(node_id, params))
       end
     end
 
@@ -135,22 +147,22 @@ module ArcFurnace
         @sink_source = intermediates_map[dsl_class.sink_source]
       end
 
-      def resolve_parameters(params_to_resolve)
+      def resolve_parameters(node_id, params_to_resolve)
         params_to_resolve.each_with_object({}) do |(key, value), result|
           result[key] =
             if value.is_a?(Symbol)
               # Allow resolution of intermediates
-              resolve_parameter(value)
+              resolve_parameter(node_id, value)
             elsif value.nil?
-              resolve_parameter(key)
+              resolve_parameter(node_id, key)
             else
               value
             end
         end
       end
 
-      def resolve_parameter(key)
-        self.params[key] || self.intermediates_map[key] || (raise "Unknown key #{key}!")
+      def resolve_parameter(node_id, key)
+        self.params[key] || self.intermediates_map[key] || (raise "When processing node #{node_id}: Unknown key #{key}!")
       end
 
     end
