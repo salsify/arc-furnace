@@ -4,10 +4,10 @@ module ArcFurnace
   class BlockFilter < Filter
     private_attr_reader :block
 
-    def initialize(source:,filter_param:, block:)
+    def initialize(source:, block:)
       raise 'Must specify a block' if block.nil?
       @block = block
-      super(source: source, filter_param: filter_param)
+      super(source: source)
     end
 
     def filter(row)

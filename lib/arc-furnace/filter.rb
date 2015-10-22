@@ -6,13 +6,11 @@ require 'arc-furnace/source'
 module ArcFurnace
   class Filter < Source
 
-    private_attr_reader :source, :filter_param
+    private_attr_reader :source
     attr_reader :value
 
-    # need to allow for default filter_param if none is provided or needed
-    def initialize(source:, filter_param:)
+    def initialize(source:)
       @source = source
-      @filter_param = filter_param
       advance
     end
 

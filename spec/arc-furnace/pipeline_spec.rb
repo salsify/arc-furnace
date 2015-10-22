@@ -89,7 +89,7 @@ describe ArcFurnace::Pipeline do
     class FilterTransform < ArcFurnace::Pipeline
       source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
 
-      filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv, filter_param: "dododo" }
+      filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv }
 
       sink type: ArcFurnace::AllFieldsCSVSink,
            source: :filtered_marketing_info,
@@ -113,7 +113,7 @@ describe ArcFurnace::Pipeline do
       class FilterTransformWithBlock < ArcFurnace::Pipeline
         source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
 
-        filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv, filter_param: "dododo" } do |row|
+        filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv } do |row|
           # yo yo yo should not hit here!
           raise 'Not a good place to be'
         end

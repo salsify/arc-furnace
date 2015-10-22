@@ -6,9 +6,8 @@ describe ArcFurnace::BlockFilter do
   let(:row2) { { "id" => "222", "Field 1" => "baz", "Field 2" => "boo bar" } }
 
   let(:source) { TestSource.new([row1, row2]) }
-  let(:filter_param) { 'filter' }
   let(:filter) do
-    ArcFurnace::BlockFilter.new(source: source, filter_param: filter_param, block: -> (row) { row['id'] != '222' })
+    ArcFurnace::BlockFilter.new(source: source, block: -> (row) { row['id'] != '222' })
   end
 
   before do
