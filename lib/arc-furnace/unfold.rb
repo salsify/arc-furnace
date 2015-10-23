@@ -7,15 +7,21 @@ module ArcFurnace
   class Unfold < Source
 
     private_attr_reader :source, :unfolded
-    attr_reader :value
 
     def initialize(source:)
       @source = source
-      advance
+      @value = nil
     end
 
     def prepare
       source.prepare
+    end
+
+    def value
+      if @value.nil? && !empty?
+        advance
+      end
+      @value
     end
 
     # Given a row from the source, produce the unfolded rows as a result. This method must return
@@ -25,7 +31,7 @@ module ArcFurnace
     end
 
     def empty?
-      value.nil? && source.empty?
+      @value.nil? && source.empty?
     end
 
     def advance
