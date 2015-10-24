@@ -41,6 +41,7 @@ describe ArcFurnace::InnerJoin do
       end
 
       it 'registered missing hash keys' do
+        expect(source.row).to eq nil
         expect(error_handler).not_to have_received(:missing_primary_key)
         expect(error_handler).to have_received(:missing_hash_key).with(key_included_in(['111', '222', '333'])).exactly(3).times
         expect(error_handler).not_to have_received(:duplicate_primary_key)

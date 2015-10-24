@@ -12,10 +12,6 @@ module ArcFurnace
       @fields = {}
     end
 
-    def prepare(fields = nil)
-
-    end
-
     def finalize
       packer.flush
       tmp_file.rewind

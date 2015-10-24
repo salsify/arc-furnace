@@ -9,10 +9,6 @@ module ArcFurnace
       @source = source
     end
 
-    def prepare
-      source.prepare
-    end
-
     def value
       value = source.value.deep_dup
       transform(value) if value

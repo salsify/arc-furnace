@@ -13,10 +13,6 @@ module ArcFurnace
       @value = nil
     end
 
-    def prepare
-      source.prepare
-    end
-
     def value
       if @value.nil? && !empty?
         advance

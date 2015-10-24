@@ -3,7 +3,6 @@ require 'arc-furnace/source'
 module ArcFurnace
   class AbstractJoin < Source
     private_attr_reader :hash, :source, :key_column
-    attr_reader :value
 
     # The source is a source, the hash is a hash, and one can optionally
     # pass the key column to get the primary key for each source entity, the
@@ -18,9 +17,13 @@ module ArcFurnace
       end
     end
 
-    def prepare
-      advance
+    def value
+      if @value.nil? && !empty?
+        advance
+      end
+      @value
     end
+
 
     def advance
       raise "Unimplemented!"

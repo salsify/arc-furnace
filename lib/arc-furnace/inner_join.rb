@@ -16,8 +16,8 @@ module ArcFurnace
     def advance
       loop do
         @value = source.row
-        break if value.nil?
-        if merge_source_row(value)
+        break if @value.nil?
+        if merge_source_row(@value)
           break
         end
       end
