@@ -17,6 +17,11 @@ module ArcFurnace
       result
     end
 
+    # Called at the end of processing, do any clean-up or state-saving here.
+    def finalize
+
+    end
+
     # Is this source empty?
     def empty?
       raise 'Unimplemented'

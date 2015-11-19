@@ -127,6 +127,7 @@ module ArcFurnace
         while (row = sink_source.row)
           sink_node.row(row)
         end
+        intermediates_map.each { |_, instance| instance.finalize }
         sink_node.finalize
       end
 

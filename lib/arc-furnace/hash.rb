@@ -17,6 +17,11 @@ module ArcFurnace
       hash.each(&block)
     end
 
+    # Called at the end of processing all rows; do any clean-up or state saving here.
+    def finalize
+
+    end
+
     def prepare
       loop do
         break if source.empty?
