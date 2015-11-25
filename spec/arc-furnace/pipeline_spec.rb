@@ -109,11 +109,11 @@ describe ArcFurnace::Pipeline do
       expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
     end
 
-    context 'with a block inadvertently specified for a node' do
+    context 'with a block inadvertently specified for a node and an extra param' do
       class FilterTransformWithBlock < ArcFurnace::Pipeline
         source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
 
-        filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv } do |row|
+        filter :filtered_marketing_info, type: MarketingFilter, params: { source: :marketing_info_csv, unknown_param: 'should not fail' } do |row|
           # yo yo yo should not hit here!
           raise 'Not a good place to be'
         end
@@ -133,6 +133,10 @@ describe ArcFurnace::Pipeline do
 
       it 'writes all rows' do
         expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
+      end
+
+      it 'sets params appropriately' do
+        expect(instance.intermediates_map.fetch(:filtered_marketing_info).params).to include(:source, :unknown_param)
       end
     end
 

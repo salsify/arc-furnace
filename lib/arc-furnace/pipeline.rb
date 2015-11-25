@@ -99,9 +99,18 @@ module ArcFurnace
 
     private
 
+    ALLOWABLE_PARAM_TYPES = [:key, :keyreq].freeze
+
     def self.define_intermediate(node_id, type:, params:)
       intermediates_map[node_id] = -> do
-        type.new(resolve_parameters(node_id, params))
+        resolved_params = resolve_parameters(node_id, params)
+        key_parameters = type.instance_method(:initialize).parameters do |param|
+          ALLOWABLE_PARAM_TYPES.include?(param.first)
+        end.map(&:second)
+        # Allow params to be passed that are not in the initializer
+        instance = type.new(resolved_params.slice(*key_parameters))
+        instance.params = resolved_params
+        instance
       end
     end
 
