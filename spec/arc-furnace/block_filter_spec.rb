@@ -31,4 +31,17 @@ describe ArcFurnace::BlockFilter do
     end
   end
 
+  context 'with params' do
+    let(:hit) { 0 }
+    let(:filter) do
+      ArcFurnace::BlockFilter.new(source: source, block: -> (row, params) { row['id'] != '222' })
+    end
+
+    describe '#row' do
+      it 'feeds all rows' do
+        expect(filter.row).to eq row1
+        expect(filter.row).to be_nil
+      end
+    end
+  end
 end

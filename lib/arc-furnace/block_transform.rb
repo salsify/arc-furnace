@@ -11,7 +11,11 @@ module ArcFurnace
     end
 
     def transform(row)
-      block.call(row)
+      if block.arity == 2
+        block.call(row, params)
+      else
+        block.call(row)
+      end
     end
 
   end
