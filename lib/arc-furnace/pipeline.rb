@@ -38,7 +38,8 @@ module ArcFurnace
     # for the source.
     def self.source(node_id, type:, params:)
       raise "Source #{type} is not a Source!" unless type <= Source
-      define_intermediate(node_id, type: type, params: params)
+      instance = define_intermediate(node_id, type: type, params: params)
+      call_with_error_handling(&instance)
     end
 
     # Define an inner join node where rows from the source are dropped
@@ -111,6 +112,14 @@ module ArcFurnace
         instance = type.new(resolved_params.slice(*key_parameters))
         instance.params = resolved_params
         instance
+      end
+    end
+
+    def self.call_with_error_handling(&instance)
+      begin
+        instance.call
+      rescue => e
+        raise e
       end
     end
 
