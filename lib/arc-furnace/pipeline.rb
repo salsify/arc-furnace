@@ -177,7 +177,7 @@ module ArcFurnace
 
       def exec_with_error_handling(&block)
         instance_exec(block)
-      rescue MalformedCSVError
+      rescue CSV::MalformedCSVError
         params = sink_source.params
         raise "File #{find_root_source(params).file.path} cannot be processed."
       end
