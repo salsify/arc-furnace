@@ -175,7 +175,7 @@ module ArcFurnace
         self.params[key] || self.intermediates_map[key] || (raise "When processing node #{node_id}: Unknown key #{key}!")
       end
 
-      def exec_with_error_handling(&block)
+      def exec_with_error_handling(block)
         instance_exec(block)
       rescue CSV::MalformedCSVError
         params = sink_source.params
