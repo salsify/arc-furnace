@@ -153,7 +153,7 @@ module ArcFurnace
         dsl_class.intermediates_map.each do |key, instance|
           intermediates_map[key] = instance_exec(&instance) if instance
         end
-        @sink_node = instance_exec(&dsl_class.sink_node)
+        @sink_node = exec_with_error_handling(&dsl_class.sink_node)
         @sink_source = intermediates_map[dsl_class.sink_source]
       end
 
@@ -175,6 +175,17 @@ module ArcFurnace
         self.params[key] || self.intermediates_map[key] || (raise "When processing node #{node_id}: Unknown key #{key}!")
       end
 
+      def exec_with_error_handling(&block)
+        instance_exec(&block) if block_given?
+      rescue CSV::MalformedCSVError
+        params = sink_source.params
+        raise "File #{find_root_source(params).file.path} cannot be processed."
+      end
+
+      def find_root_source(params)
+        source = params[:source]
+        source = params[:source] while source.params[:source]
+      end
     end
   end
 end

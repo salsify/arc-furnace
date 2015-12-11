@@ -5,8 +5,8 @@ require 'csv'
 module ArcFurnace
   class CSVSource < Source
     include CSVToHashWithDuplicateHeaders
-    private_attr_reader :csv, :file
-    attr_reader :value
+    private_attr_reader :csv
+    attr_reader :value, :file
 
     def initialize(filename: , encoding: 'UTF-8')
       @file = File.open(filename, encoding: encoding)
