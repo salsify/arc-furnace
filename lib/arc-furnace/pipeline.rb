@@ -38,8 +38,7 @@ module ArcFurnace
     # for the source.
     def self.source(node_id, type:, params:)
       raise "Source #{type} is not a Source!" unless type <= Source
-      instance = define_intermediate(node_id, type: type, params: params)
-      call_with_error_handling(&instance)
+      define_intermediate(node_id, type: type, params: params)
     end
 
     # Define an inner join node where rows from the source are dropped
@@ -115,14 +114,6 @@ module ArcFurnace
       end
     end
 
-    def self.call_with_error_handling(&instance)
-      begin
-        instance.call
-      rescue => e
-        raise e
-      end
-    end
-
     class PipelineInstance
       attr_reader :sink_node, :sink_source, :intermediates_map, :params, :dsl_class, :error_handler
 
@@ -162,7 +153,7 @@ module ArcFurnace
         dsl_class.intermediates_map.each do |key, instance|
           intermediates_map[key] = instance_exec(&instance) if instance
         end
-        @sink_node = instance_exec(&dsl_class.sink_node)
+        @sink_node = exec_with_error_handling(&dsl_class.sink_node)
         @sink_source = intermediates_map[dsl_class.sink_source]
       end
 
@@ -182,6 +173,20 @@ module ArcFurnace
 
       def resolve_parameter(node_id, key)
         self.params[key] || self.intermediates_map[key] || (raise "When processing node #{node_id}: Unknown key #{key}!")
+      end
+
+      def exec_with_error_handling(&block)
+        instance_exec(block)
+      rescue MalformedCSVError
+        raise "File #{find_source(sink_source.params).file.path} is malformed and cannot be processed."
+      end
+
+      def find_source(params)
+        source = params[:source]
+        while source.params[:source]
+          source = params[:source]
+        end
+        source
       end
 
     end
