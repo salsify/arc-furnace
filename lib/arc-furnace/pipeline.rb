@@ -151,9 +151,9 @@ module ArcFurnace
 
       def build
         dsl_class.intermediates_map.each do |key, instance|
-          intermediates_map[key] = instance_exec(&instance) if instance
+          intermediates_map[key] = exec_with_error_handling(&instance) if instance
         end
-        @sink_node = exec_with_error_handling(&dsl_class.sink_node)
+        @sink_node = instance_exec(&dsl_class.sink_node)
         @sink_source = intermediates_map[dsl_class.sink_source]
       end
 
@@ -176,7 +176,7 @@ module ArcFurnace
       end
 
       def exec_with_error_handling(&block)
-        instance_exec(&block) if block_given?
+        instance_exec(&block)
       rescue CSV::MalformedCSVError
         params = sink_source.params
         raise "File #{find_root_source(params).file.path} cannot be processed."
