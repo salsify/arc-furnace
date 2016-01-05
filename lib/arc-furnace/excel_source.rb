@@ -7,8 +7,11 @@ module ArcFurnace
     private_attr_reader :excel, :enumerator
     attr_reader :value
 
-    def initialize(filename: )
+    def initialize(filename: , sheet: nil)
       @excel = Roo::Excelx.new(filename)
+      if sheet
+        excel.default_sheet = sheet
+      end
       super()
     end
 
