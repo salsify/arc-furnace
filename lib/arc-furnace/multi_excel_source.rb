@@ -4,13 +4,14 @@ require 'roo'
 module ArcFurnace
   class MultiExcelSource < EnumeratorSource
 
-    private_attr_reader :excels, :enumerator
-    attr_reader :value, :excel
+    private_attr_reader :excel, :enumerator
+    attr_reader :value, :filenames, :sheet
 
     def initialize(filenames: , sheet: nil)
-      @excels = filenames.map { |filename| Roo::Excelx.new(filename) }.reverse
+      @filenames = filenames.reverse
+      @excel = Roo::Excelx.new(@filenames.pop)
       if sheet
-        excels.default_sheet = sheet
+        @excel.default_sheet = sheet
       end
       super()
     end
@@ -22,6 +23,8 @@ module ArcFurnace
     def advance
       advance_in_current_file || open_next_file
     end
+
+    private
 
     def advance_in_current_file
       @value =
@@ -37,10 +40,11 @@ module ArcFurnace
     def open_next_file
       excel.close if excel
       @excel = nil
-      if excels.empty?
+      if filenames.empty?
         nil
       else
-        @excel = excels.pop
+        @excel = Roo::Excelx.new(filenames.pop)
+        @enumerator = build_enumerator
         advance_in_current_file || open_next_file
       end
     end
