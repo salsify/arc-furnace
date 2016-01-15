@@ -4,7 +4,7 @@ require 'roo'
 module ArcFurnace
   class ExcelSource < EnumeratorSource
 
-    private_attr_reader :excel, :enumerator
+    private_attr_reader :excel, :header_row
     attr_reader :value
 
     def initialize(filename: , sheet: nil)
@@ -19,21 +19,30 @@ module ArcFurnace
       @excel.close if @excel
     end
 
+    def preprocess
+      enumerator.next
+    end
+
+    def extract_cell_value(cell)
+      if cell
+        coerced_value = cell.type == :string ? cell.value : cell.excelx_value.try(:to_s).try(:strip)
+        coerced_value unless coerced_value.blank?
+      end
+    end
+
     def build_enumerator
-      header_row = excel.row(1)
-
-      last_row_index = excel.last_row
-      current_row_index = 2
-
       Enumerator.new do |yielder|
-        until current_row_index > last_row_index
-          row = header_row.each_with_object(::Hash.new).each_with_index do |(header, result), index|
-            value = excel.cell(current_row_index, index + 1)
-            coerced_value = (value.is_a?(String) ? value : excel.excelx_value(current_row_index, index + 1)).try(:to_s).try(:strip)
-            result[header] = coerced_value unless coerced_value.blank?
-          end
-          current_row_index += 1
-          yielder << row
+        excel.each_row_streaming do |row|
+          yielder <<
+              if header_row
+                row.each_with_object({}) do |cell, result|
+                  value = extract_cell_value(cell)
+                  result[header_row[cell.coordinate.column - 1]] = value if value
+                end
+              else
+                # First time, return the header row so we can save it.
+                @header_row = row.map { |value| extract_cell_value(value) }
+              end
         end
       end
     end
