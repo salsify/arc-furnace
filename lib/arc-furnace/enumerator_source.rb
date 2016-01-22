@@ -8,7 +8,14 @@ module ArcFurnace
 
     def initialize
       @enumerator = build_enumerator
+      preprocess
       advance
+    end
+
+    # Called after setting up the enumerator but before advancing it
+    # Use this to extract header rows for instance.
+    def preprocess
+      # nothing
     end
 
     # Is this source empty?
