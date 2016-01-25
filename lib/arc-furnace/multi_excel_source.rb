@@ -49,17 +49,13 @@ module ArcFurnace
       if sheets_info_array.empty?
         nil
       else
-        initialize_next_sheet
+        sheets_info = sheets_info_array.pop
+        @excel = Roo::Excelx.new(sheets_info[:filename])
+        @excel.default_sheet = sheets_info[:sheet]
+        @enumerator = build_enumerator
+        preprocess
+        advance
       end
-    end
-
-    def initialize_next_sheet
-      sheets_info = sheets_info_array.pop
-      @excel = Roo::Excelx.new(sheets_info[:filename])
-      @excel.default_sheet = sheets_info[:sheet]
-      @enumerator = build_enumerator
-      preprocess
-      advance
     end
 
     def extract_cell_value(cell)

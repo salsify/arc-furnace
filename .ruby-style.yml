@@ -3,3 +3,11 @@ Style/StringLiterals:
   SupportedStyles:
     - single_quotes
     - double_quotes
+
+Metrics/LineLength:
+  Max: 100
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
