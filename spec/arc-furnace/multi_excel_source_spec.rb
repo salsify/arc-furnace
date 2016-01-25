@@ -5,8 +5,8 @@ describe ArcFurnace::MultiExcelSource do
   let(:source) { ArcFurnace::MultiExcelSource.new(sheets_info_array: sheets_info_array) }
   let(:sheets_info_array) do
     [
-        { filename: "#{ArcFurnace.test_root}/resources/excel.xlsx", sheet: sheet_name },
-        { filename: "#{ArcFurnace.test_root}/resources/other_excel.xlsx", sheet: sheet_name }
+      { filename: "#{ArcFurnace.test_root}/resources/excel.xlsx", sheet: sheet_name },
+      { filename: "#{ArcFurnace.test_root}/resources/other_excel.xlsx", sheet: sheet_name }
     ]
   end
 
