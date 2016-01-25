@@ -2,15 +2,14 @@ require 'spec_helper'
 require 'arc-furnace/multi_excel_source'
 
 describe ArcFurnace::MultiExcelSource do
-  let(:sheet) { nil }
-  let(:filenames) do
+  let(:sheets_info_array) do
     [
-        "#{ArcFurnace.test_root}/resources/excel.xlsx",
-        "#{ArcFurnace.test_root}/resources/other_excel.xlsx"
+        { filename: "#{ArcFurnace.test_root}/resources/excel.xlsx", sheet: 'Sheet1' },
+        { filename: "#{ArcFurnace.test_root}/resources/other_excel.xlsx", sheet: 'Sheet1' }
     ]
   end
 
-  let(:source) { ArcFurnace::MultiExcelSource.new(filenames: filenames, sheet: sheet) }
+  let(:source) { ArcFurnace::MultiExcelSource.new(sheets_info_array: sheets_info_array) }
   let(:row1) { { 'Id' => '1', 'ColA' => 'foo', 'ColB' => 'bar' } }
   let(:row2) { { 'Id' => '2', 'ColA' => 'baz', 'ColC' => 'biz'} }
   let(:row3) { { 'Id' => '3', 'ColA' => 'boo', 'ColB' => 'boop' } }
@@ -30,8 +29,13 @@ describe ArcFurnace::MultiExcelSource do
     end
   end
 
-  context 'with a sheet' do
-    let(:sheet) { 'Sheet2' }
+  context 'with Sheet2' do
+    let(:sheets_info_array) do
+      [
+          { filename: "#{ArcFurnace.test_root}/resources/excel.xlsx", sheet: 'Sheet2' },
+          { filename: "#{ArcFurnace.test_root}/resources/other_excel.xlsx", sheet: 'Sheet2' }
+      ]
+    end
     let(:row1) { { 'Id' => '1', 'Col1' => 'foo', 'Col2' => 'bar' } }
     let(:row2) { { 'Id' => '2', 'Col1' => 'baz', 'Col3' => 'biz'} }
     let(:row3) { { 'Id' => '3', 'Col1' => 'boo', 'Col2' => 'far' } }
