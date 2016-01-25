@@ -73,15 +73,15 @@ module ArcFurnace
       Enumerator.new do |yielder|
         excel.each_row_streaming do |row|
           yielder <<
-              if header_row
-                row.each_with_object({}) do |cell, result|
-                  value = extract_cell_value(cell)
-                  result[header_row[cell.coordinate.column - 1]] = value if value
-                end
-              else
-                # First time, return the header row so we can save it.
-                @header_row = row.map { |value| extract_cell_value(value) }
+            if header_row
+              row.each_with_object({}) do |cell, result|
+                value = extract_cell_value(cell)
+                result[header_row[cell.coordinate.column - 1]] = value if value
               end
+            else
+              # First time, return the header row so we can save it.
+              @header_row = row.map { |value| extract_cell_value(value) }
+            end
         end
       end
     end

@@ -11,9 +11,9 @@ describe ArcFurnace::MultiExcelSource do
 
   let(:source) { ArcFurnace::MultiExcelSource.new(sheets_info_array: sheets_info_array) }
   let(:row1) { { 'Id' => '1', 'ColA' => 'foo', 'ColB' => 'bar' } }
-  let(:row2) { { 'Id' => '2', 'ColA' => 'baz', 'ColC' => 'biz'} }
+  let(:row2) { { 'Id' => '2', 'ColA' => 'baz', 'ColC' => 'biz' } }
   let(:row3) { { 'Id' => '3', 'ColA' => 'boo', 'ColB' => 'boop' } }
-  let(:row4) { { 'Id' => '4', 'ColA' => 'beez', 'ColC' => 'kneez'} }
+  let(:row4) { { 'Id' => '4', 'ColA' => 'beez', 'ColC' => 'kneez' } }
 
   describe '#row and #value' do
     it 'feeds all rows' do
@@ -37,10 +37,10 @@ describe ArcFurnace::MultiExcelSource do
       ]
     end
     let(:row1) { { 'Id' => '1', 'Col1' => 'foo', 'Col2' => 'bar' } }
-    let(:row2) { { 'Id' => '2', 'Col1' => 'baz', 'Col3' => 'biz'} }
+    let(:row2) { { 'Id' => '2', 'Col1' => 'baz', 'Col3' => 'biz' } }
     let(:row3) { { 'Id' => '3', 'Col1' => 'boo', 'Col2' => 'far' } }
     # RIP BEEZIN
-    let(:row4) { { 'Id' => '4', 'Col1' => 'beez', 'Col3' => 'in'} }
+    let(:row4) { { 'Id' => '4', 'Col1' => 'beez', 'Col3' => 'in' } }
 
     it 'feeds all rows' do
       expect(source.value).to eq row1
