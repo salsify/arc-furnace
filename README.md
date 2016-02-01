@@ -99,7 +99,12 @@ associated sugar in the `transform` method of `Pipeline` make this very easy (se
 
 An `Unfold` acts as a source, however, takes a source as an input and produces multiple rows for that source as an output.
 A common case for this is splitting rows into multiple rows depending upon their keys. The `BlockTransform` and associated
-sugar in the `unfold` method of `Pipeline` make this fiarly easy (see `pipeline_spec.rb`).
+sugar in the `unfold` method of `Pipeline` make this fairly easy (see `pipeline_spec.rb`).
+
+#### Observers
+
+An `Observer` acts as a source and takes a source as an input and serves as a pass-through for a stream. Observers
+are used to observe the data stream--record data for use elsewhere.
 
 #### Sinks
 

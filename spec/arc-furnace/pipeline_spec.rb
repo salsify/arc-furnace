@@ -109,7 +109,8 @@ describe ArcFurnace::Pipeline do
       expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
     end
 
-    context 'with a block inadvertently specified for a node and an extra param' do
+    context 'with a block inadvertently specified for a node and an extra param with an observer' do
+      let(:registry) { Set.new }
       class FilterTransformWithBlock < ArcFurnace::Pipeline
         source :marketing_info_csv, type: ArcFurnace::CSVSource, params: { filename: :marketing_filename }
 
@@ -118,8 +119,12 @@ describe ArcFurnace::Pipeline do
           raise 'Not a good place to be'
         end
 
+        observer :observed_stream, params: { source: :filtered_marketing_info, registry: :registry } do |row, params|
+          params.fetch(:registry).add(row['id'])
+        end
+
         sink type: ArcFurnace::AllFieldsCSVSink,
-             source: :filtered_marketing_info,
+             source: :observed_stream,
              params: { filename: :destination_name }
 
       end
@@ -127,7 +132,8 @@ describe ArcFurnace::Pipeline do
       let(:instance) do
         FilterTransformWithBlock.instance(
             marketing_filename: marketing_source,
-            destination_name: target_filename
+            destination_name: target_filename,
+            registry: registry
         )
       end
 
@@ -137,6 +143,10 @@ describe ArcFurnace::Pipeline do
 
       it 'sets params appropriately' do
         expect(instance.intermediates_map.fetch(:filtered_marketing_info).params).to include(:source, :unknown_param)
+      end
+
+      it 'observes all rows' do
+        expect(registry).to eq Set.new(['111'])
       end
     end
 
