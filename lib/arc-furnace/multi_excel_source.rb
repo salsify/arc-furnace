@@ -60,7 +60,7 @@ module ArcFurnace
 
     def extract_cell_value(cell)
       if cell
-        coerced_value = cell.type == :string ? cell.value : cell.excelx_value.try(:to_s).try(:strip)
+        coerced_value = cell.type == :string ? cell.value : cell.cell_value.try(:to_s).try(:strip)
         coerced_value unless coerced_value.blank?
       end
     end
