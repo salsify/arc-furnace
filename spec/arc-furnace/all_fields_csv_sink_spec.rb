@@ -31,7 +31,4 @@ describe ArcFurnace::AllFieldsCSVSink do
       expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
     end
   end
-
-
-
 end
