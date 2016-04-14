@@ -6,15 +6,29 @@ describe ArcFurnace::AllFieldsCSVSink do
   let(:sink) { ArcFurnace::AllFieldsCSVSink.new(filename: target_filename) }
   after { File.delete(target_filename) if File.exists?(target_filename) }
 
-  before do
-    sink.prepare
-    sink.row({ "id" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar" })
-    sink.row({ "id" => "222", "Field 1" => [ "baz", "bag" ], "Field 2" => "boo bar" })
-    sink.finalize
+  describe 'With string keys' do
+    before do
+      sink.prepare
+      sink.row("id" => "111", "Field 1" => "boo bar", "Field 2" => "baz, bar" )
+      sink.row("id" => "222", "Field 1" => [ "baz", "bag" ], "Field 2" => "boo bar")
+      sink.finalize
+    end
+
+    it 'writes all rows' do
+      expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
+    end
   end
 
-  it 'writes all rows' do
-    expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
-  end
+  describe 'With symbolized keys' do
+    before do
+      sink.prepare
+      sink.row(id: "111", "Field 1": "boo bar", "Field 2": "baz, bar")
+      sink.row(id: "222", "Field 1": [ "baz", "bag" ], "Field 2": "boo bar")
+      sink.finalize
+    end
 
+    it 'writes all rows' do
+      expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
+    end
+  end
 end

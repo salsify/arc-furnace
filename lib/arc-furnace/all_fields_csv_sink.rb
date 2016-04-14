@@ -44,7 +44,7 @@ module ArcFurnace
     def write_row(hash)
       row = []
       fields.each do |key, count|
-        values = Array.wrap(hash[key])
+        values = Array.wrap(hash[key.to_s])
         (values.slice(0, count) || []).each do |value|
           row << value
         end
