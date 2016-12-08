@@ -5,10 +5,10 @@ module ArcFurnace
   class AllFieldsCSVSink < Sink
     private_attr_reader :csv, :fields, :tmp_file, :packer, :fields, :field_mappings
 
-    def initialize(filename: , encoding: 'UTF-8')
+    def initialize(filename: , encoding: 'UTF-8', force_quotes: false)
       @tmp_file = Tempfile.new('intermediate_results', encoding: 'binary')
       @packer = MessagePack::Packer.new(tmp_file)
-      @csv = CSV.open(filename, 'wb', encoding: encoding, headers: true)
+      @csv = CSV.open(filename, 'wb', encoding: encoding, headers: true, force_quotes: force_quotes)
       @fields = {}
     end
 
