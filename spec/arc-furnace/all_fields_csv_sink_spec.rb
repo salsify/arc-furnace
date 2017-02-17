@@ -22,8 +22,8 @@ describe ArcFurnace::AllFieldsCSVSink do
   describe 'With symbolized keys' do
     before do
       sink.prepare
-      sink.row('id' => '111', 'Field 1' => 'boo bar', 'Field 2' => 'baz, bar')
-      sink.row('id' => '222', 'Field 1' => [ 'baz', 'bag' ], 'Field 2' => 'boo bar')
+      sink.row('id': '111', 'Field 1': 'boo bar', 'Field 2': 'baz, bar')
+      sink.row('id': '222', 'Field 1': [ 'baz', 'bag' ], 'Field 2': 'boo bar')
       sink.finalize
     end
 
