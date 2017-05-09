@@ -24,7 +24,6 @@ module ArcFurnace
       @value
     end
 
-
     def advance
       raise "Unimplemented!"
     end
