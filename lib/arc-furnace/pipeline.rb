@@ -5,7 +5,7 @@ require 'arc-furnace/error_handler'
 module ArcFurnace
   class Pipeline
 
-    eattr_accessor :sink_node, :sink_source, :intermediates_map
+    eattr_accessor :sink_node, :sink_source, :intermediates_map, :params
     @intermediates_map = {}
 
     # Ensure that subclasses don't overwrite the parent's transform
@@ -106,6 +106,7 @@ module ArcFurnace
     # will have a single public method--#execute, which will perform the
     # transformation.
     def self.instance(params = {})
+      @params = params
       PipelineInstance.new(self, params)
     end
 
