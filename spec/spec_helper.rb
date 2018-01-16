@@ -1,6 +1,8 @@
 require 'arc-furnace'
 require 'ice_nine'
 require 'ice_nine/core_ext/object'
+require 'pry'
+require 'axlsx'
 
 module ArcFurnace
   def self.test_root

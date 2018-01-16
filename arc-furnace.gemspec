@@ -25,8 +25,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport', '>= 3.2'
   spec.add_dependency 'eigenclass', '~> 2'
   spec.add_dependency 'roo', '>= 2.1'
+  spec.add_dependency 'axlsx'
+  spec.add_dependency 'zip-zip'
 
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3'
   spec.add_development_dependency 'ice_nine', '>= 0.11'
+  spec.add_development_dependency 'pry'
 end
