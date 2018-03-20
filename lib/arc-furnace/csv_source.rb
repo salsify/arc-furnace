@@ -5,11 +5,15 @@ require 'csv'
 module ArcFurnace
   class CSVSource < EnumeratorSource
     include CSVToHashWithDuplicateHeaders
-    attr_reader :value, :file, :csv
 
-    def initialize(filename: nil, csv: nil, encoding: 'UTF-8')
+    attr_reader :value, :file, :csv, :delimiter
+
+    COMMA = ','.freeze
+
+    def initialize(filename: nil, csv: nil, encoding: 'UTF-8', delimiter: COMMA)
       @file = File.open(filename, encoding: encoding) if filename
       @csv = csv
+      @delimiter = delimiter
       super()
     end
 
@@ -19,7 +23,7 @@ module ArcFurnace
 
     def build_enumerator
       Enumerator.new do |yielder|
-        (csv ? csv : CSV.new(file, headers: true)).each do |row|
+        (csv ? csv : CSV.new(file, { headers: true, col_sep: delimiter })).each do |row|
           yielder << csv_to_hash_with_duplicates(row)
         end
       end

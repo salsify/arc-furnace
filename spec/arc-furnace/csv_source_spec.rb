@@ -37,4 +37,18 @@ describe ArcFurnace::CSVSource do
       expect(source.row).to eq ({ "Field 3" => "black", "Field 4" => "brown" })
     end
   end
+
+  describe 'with semicolons' do
+    let(:source) {
+      ArcFurnace::CSVSource.new(
+        filename: "#{ArcFurnace.test_root}/resources/semicolon.csv",
+        delimiter: ';'
+      )
+    }
+    it 'feeds all rows' do
+      expect(source.row).to eq ({"id"=>"123", "Field 3"=>"boo bar", "Field 4"=>"boo baz"})
+      expect(source.row).to eq ({"id"=>"456", "Field 3"=>"baz", "Field 4"=>"boo bar"})
+      expect(source.row).to eq ({"id"=>"789", "Field 3"=>"black", "Field 4"=>"brown"})
+    end
+  end
 end
