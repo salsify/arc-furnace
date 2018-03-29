@@ -1,8 +1,8 @@
 module ArcFurnace
   class PassthroughSink < Sink
 
-    def row(anything)
-      anything
+    def row(object)
+      object
     end
 
   end
