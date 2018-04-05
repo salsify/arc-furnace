@@ -18,6 +18,10 @@ module ArcFurnace
 
     alias_method :group_by?, :group_by
 
+    #
+    # note that group_by requires the entire file to be
+    # read into memory
+    #
     def preprocess
       if group_by?
         build_headers
