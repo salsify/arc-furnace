@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    arc-furnace (0.1.33)
+    arc-furnace (0.1.34)
       activesupport
       axlsx
       eigenclass
