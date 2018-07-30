@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    arc-furnace (0.1.34)
+    arc-furnace (0.1.35)
       activesupport
       axlsx
       eigenclass
@@ -33,7 +33,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     msgpack (1.2.4)
-    nokogiri (1.8.2)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
