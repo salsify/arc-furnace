@@ -11,6 +11,7 @@ describe ArcFurnace::AllFieldsCSVSink do
       sink.prepare
       sink.row('id' => '111', 'Field 1' => 'boo bar', 'Field 2' => 'baz, bar')
       sink.row('id' => '222', 'Field 1' => %w(baz bag), 'Field 2' => 'boo bar')
+      sink.row({})
       sink.finalize
     end
 

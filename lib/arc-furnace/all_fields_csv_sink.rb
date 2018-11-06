@@ -27,6 +27,7 @@ module ArcFurnace
     end
 
     def row(hash)
+      return unless hash.present?
       update_field_counts(hash)
       packer.write(hash)
     end
