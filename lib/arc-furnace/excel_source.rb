@@ -42,6 +42,7 @@ module ArcFurnace
 
     def extract_cell_value(cell)
       if cell
+        return cell.value.strftime('%m-%d-%y') if cell.type == :date
         coerced_value = cell.type == :string ? cell.value : cell.cell_value.try(:to_s).try(:strip)
         coerced_value unless coerced_value.blank?
       end
