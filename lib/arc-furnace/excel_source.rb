@@ -7,12 +7,12 @@ module ArcFurnace
     private_attr_reader :excel, :header_row
     attr_reader :value, :group_by, :key_column
 
-    def initialize(filename:, sheet: nil, group_by: false, key_column: nil)
-      @excel = Roo::Excelx.new(filename)
+    def initialize(excel: nil, filename: nil, sheet: nil, group_by: false, key_column: nil)
+      @excel = excel ? excel : Roo::Excelx.new(filename)
       @preprocessed_excel = []
       @group_by = group_by
       @key_column = key_column
-      excel.default_sheet = sheet if sheet
+      @excel.default_sheet = sheet if sheet
       super()
     end
 
