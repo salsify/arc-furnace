@@ -1,6 +1,6 @@
 require 'arc-furnace/enumerator_source'
 
-module ArcFurance
+module ArcFurnace
   class SalsifyJSONSource < ArcFurnace::EnumeratorSource
 
     attr_reader :salsify_json
