@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    arc-furnace (0.1.41)
+    arc-furnace (0.1.42)
       activesupport
       axlsx
       eigenclass
@@ -73,4 +73,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   1.16.2
+   1.17.2
