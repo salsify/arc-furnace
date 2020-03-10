@@ -17,7 +17,7 @@ module ArcFurnace
     # Define the sink for this transformation. Only a single sink may be
     # specified per transformation. The sink is delivered a hash per row or
     # entity, and feeds them from the graph of nodes above it.
-    def self.sink(type: , source:, params:)
+    def self.sink(type:, source:, params:)
       if sink_node
         raise 'Sink already defined!'
       end
@@ -47,7 +47,7 @@ module ArcFurnace
       define_intermediate(node_id, type: type, params: params)
     end
 
-    # Define an outer join nod  e where rows from the source are kept
+    # Define an outer join node where rows from the source are kept
     # even if an associated entity is not found in the hash for the join key
     def self.outer_join(node_id, type: ArcFurnace::OuterJoin, params:)
       define_intermediate(node_id, type: type, params: params)
@@ -62,6 +62,12 @@ module ArcFurnace
         params[:block] = block
       end
       raise "Transform #{type} is not a Transform!" unless type <= Transform
+      define_intermediate(node_id, type: type, params: params)
+    end
+
+    # Define a merge node where rows from multiple source nodes are merged
+    # into a single row
+    def self.merge(node_id, type: ArcFurnace::Merge, params:)
       define_intermediate(node_id, type: type, params: params)
     end
 
@@ -173,7 +179,9 @@ module ArcFurnace
       def resolve_parameters(node_id, params_to_resolve)
         params_to_resolve.each_with_object({}) do |(key, value), result|
           result[key] =
-            if value.is_a?(Symbol)
+            if key == :sources
+              value.map { |_value| resolve_parameter(node_id, _value)  }
+            elsif value.is_a?(Symbol)
               # Allow resolution of intermediates
               resolve_parameter(node_id, value)
             elsif value.nil?
