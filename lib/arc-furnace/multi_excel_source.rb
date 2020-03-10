@@ -6,7 +6,7 @@ module ArcFurnace
 
     private_attr_reader :enumerator, :header_row
     attr_reader :value, :excel, :sheets_info_array
-    
+
     # Sheets is in the format of:
     # [
     #   { filename: 'foo.xlsx', sheet: 'sheet name' },
@@ -33,12 +33,12 @@ module ArcFurnace
 
     def advance_in_current_file
       @value =
-          begin
-            enumerator.next if enumerator
-          rescue StopIteration
-            @enumerator = nil
-            nil
-          end
+        begin
+          enumerator.next if enumerator
+        rescue StopIteration
+          @enumerator = nil
+          nil
+        end
       value
     end
 
