@@ -22,7 +22,6 @@ describe ArcFurnace::CSVSink do
 
   describe '#row' do
     it 'writes all rows' do
-      binding.pry
       expect(FileUtils.compare_file(target_filename, expected_output_path)).to eq true
     end
   end
