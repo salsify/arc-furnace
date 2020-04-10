@@ -1,0 +1,7 @@
+product_id,property_id,property_value
+111,id,111
+111,Field 1,boo bar
+111,Field 2,"baz, bar"
+222,id,222
+222,Field 1,baz
+222,Field 2,boo bar
