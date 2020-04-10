@@ -2,6 +2,7 @@ require 'arc-furnace/sink'
 
 module ArcFurnace
   class CSVSink < Sink
+    
     private_attr_reader :csv, :fields
 
     def initialize(filename: , fields: , encoding: 'UTF-8', force_quotes: false)
