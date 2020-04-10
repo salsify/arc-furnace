@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: salsify/ruby_ci:2.6.2
+    environment:
+      RACK_ENV: "test"
+      RAILS_ENV: "test"
+      CIRCLE_TEST_REPORTS: "test-results"
+    working_directory: ~/arc-furnance
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-gems-ruby-2.6.2-{{ checksum "arc-furnance.gemspec" }}-{{ checksum "Gemfile" }}
+            - v1-gems-ruby-2.6.2-
+      - run:
+          name: Install Gems
+          command: |
+            if ! bundle check --path=vendor/bundle; then
+              bundle install --path=vendor/bundle --jobs=4 --retry=3
+              bundle clean
+            fi
+      - save_cache:
+          key: v1-gems-ruby-2.6.2-{{ checksum "arc-furnance.gemspec" }}-{{ checksum "Gemfile" }}
+          paths:
+            - "vendor/bundle"
+            - "gemfiles/vendor"
+      - run:
+          name: Run Tests
+          command: |
+            bundle exec rspec
+      - store_test_results:
+          path: "test-results"
