@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'axlsx'
   spec.add_dependency 'eigenclass'
   spec.add_dependency 'msgpack'
-  spec.add_dependency 'roo', '~> 2.10.0'
+  spec.add_dependency 'roo'
   spec.add_dependency 'zip-zip'
 
   spec.add_development_dependency 'ice_nine'
