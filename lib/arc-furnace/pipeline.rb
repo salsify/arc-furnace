@@ -23,7 +23,7 @@ module ArcFurnace
       end
 
       @sink_node = -> do
-        type.new(resolve_parameters(:sink, params))
+        type.new(**resolve_parameters(:sink, params))
       end
       @sink_source = source
     end
@@ -113,7 +113,7 @@ module ArcFurnace
     # transformation.
     def self.instance(params = {})
       @params = params
-      PipelineInstance.new(self, params)
+      PipelineInstance.new(self, **params)
     end
 
     private
@@ -136,11 +136,11 @@ module ArcFurnace
     class PipelineInstance
       attr_reader :sink_node, :sink_source, :intermediates_map, :params, :dsl_class, :error_handler
 
-      def initialize(dsl_class, error_handler: ErrorHandler.new, **params)
+      def initialize(dsl_class, **params)
         @dsl_class = dsl_class
         @params = params
         @intermediates_map = {}
-        @error_handler = error_handler
+        @error_handler = params[:error_handler] || ErrorHandler.new
       end
 
       def execute
@@ -197,7 +197,7 @@ module ArcFurnace
       end
 
       def create_instance_with_error_handling(type, resolved_params, key_parameters)
-        type.new(resolved_params.slice(*key_parameters))
+        type.new(**resolved_params.slice(*key_parameters))
       rescue CSV::MalformedCSVError
         raise "File #{resolved_params[:filename]} cannot be processed."
       end

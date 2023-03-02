@@ -20,13 +20,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '> 2.2.2'
+  spec.required_ruby_version = '> 3.0.0'
 
   spec.add_dependency 'activesupport'
   spec.add_dependency 'axlsx'
   spec.add_dependency 'eigenclass'
   spec.add_dependency 'msgpack'
-  spec.add_dependency 'roo', '~> 2.7.1'
+  spec.add_dependency 'roo', '~> 2.10.0'
   spec.add_dependency 'zip-zip'
 
   spec.add_development_dependency 'ice_nine'

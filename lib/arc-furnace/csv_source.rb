@@ -56,7 +56,7 @@ module ArcFurnace
     end
 
     def parse_file
-      (csv ? csv : CSV.new(file, { headers: true, col_sep: delimiter })).each { |row| yield row }
+      (csv ? csv : CSV.new(file, headers: true, col_sep: delimiter)).each { |row| yield row }
     end
   end
 end
